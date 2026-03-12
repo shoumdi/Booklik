@@ -1,0 +1,63 @@
+services:
+  backend:
+    container_name: backend_container
+    build:
+      dockerfile: ./docker/php/dockerfile
+      args: 
+        UID: 1000
+        GID: 1000
+    depends_on:
+      - database 
+      - cache_server
+    volumes:
+      - ./backend:/var/www/html
+    networks:
+     - booklik_network
+  
+  database:
+    container_name: db_container
+    image: mysql:8.1
+    restart: unless-stopped
+    environment:
+      MYSQL_USER: booklik
+      MYSQL_ROOT_PASSWORD: booklik
+      MYSQL_DATABASE: booklik_db
+      MYSQL_PASSWORD: 1234
+    volumes:
+     - db_data:/var/lib/mysql
+    ports:
+     - "3306:3306"
+    networks:
+      - booklik_network
+      
+  cache_server:
+    container_name: cache_container
+    image: redis:8.6.1
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - booklik_network
+    command: redis-server --appendonly yes
+  
+  webserver:
+    container_name: webserver_container
+    image: nginx:alpine
+    volumes:
+      - ./backend:/var/www/html
+      - ./docker/development/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on: 
+      - backend
+    ports:
+      - "8080:80"
+    networks: 
+      - booklik_network
+
+networks:
+  booklik_network:
+
+volumes:
+  db_data:
+  redis_data:
