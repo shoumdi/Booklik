@@ -6,15 +6,16 @@ use DomainException;
 use JWT\JWT;
 use JWT\Exception\ExpiredTokenException;
 use JWT\Exception\InvalidTokenException;
+use JWT\JwtProvider;
 use Tests\TestCase;
 
 class JwtTest extends TestCase
 {
-    private JWT $jwt;
-    
+    private JwtProvider $jwt;
+
     protected function setUp(): void
     {
-        $this->jwt = new JWT();
+        $this->jwt = new JwtProvider();
     }
     public function test_invalid_algo(): void
     {

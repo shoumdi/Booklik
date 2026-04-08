@@ -3,9 +3,12 @@
 namespace App\Service\Auth;
 
 use App\Dto\Auth\LoginDto;
+use App\Models\Role;
 use App\Models\User;
 use DomainException;
+use Exception;
 use Illuminate\Support\Facades\Auth;
+use JWT\Exception\InvalidCredentialsException;
 
 class LoginService
 {
@@ -14,8 +17,12 @@ class LoginService
         LoginDto $dto
     ) {
         try {
-            return Auth::guard()->attempt($dto->toArray());
-        } catch (DomainException $e) {
+            $tokens = Auth::guard()->attempt($dto->toArray());
+            return [
+                'tokens' => $tokens,
+                'user' => User::where('email', $dto->email)->first()
+            ];
+        } catch (Exception $e) {
             // To do logg
             throw $e;
         }

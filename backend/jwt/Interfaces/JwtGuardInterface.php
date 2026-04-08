@@ -11,14 +11,14 @@ interface JwtGuardInterface extends Guard
     /**
      * 
      */
-    public function attempt(array $credentials): ?array;
+    public function attempt(array $credentials): array;
 
     /**
      * 
      */
     public function login(Authenticatable $user): array;
 
-    public function refreshToken():?string;
+    public function refreshToken():?array;
 
     /**
      * 

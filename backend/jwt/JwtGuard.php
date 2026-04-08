@@ -23,13 +23,15 @@ class JwtGuard implements JwtGuardInterface
     public function __construct(
         private UserProvider $userProvider,
         private Request $request,
-        private JWT $jwt
+        private JwtProvider $jwt
     ) {}
 
-    public function attempt(array $credentials): ?array
+    public function attempt(array $credentials): array
     {
+        $this->validate($credentials);
         $user = $this->userProvider->retrieveByCredentials($credentials);
-        if (!$user) return null;
+        if (!$user || !password_verify($credentials['password'], $user->password))
+            throw new InvalidCredentialsException("Invalid credentials");
         return $this->generateTokens($user);
     }
     public function login(Authenticatable $user): array
@@ -62,35 +64,31 @@ class JwtGuard implements JwtGuardInterface
             )
         ];
     }
-    public function refreshToken(): ?string
+    public function refreshToken(): ?array
     {
         if (!$token = $this->request->cookie('jrt'))
             throw new RequiredTokenException('refresh token not found');
         $payload = $this->jwt->decode($token, env('JWT_SECRET', 'Bearer'));
         if (Cache::has("blacklist:$payload->jti"))
             throw new ExpiredTokenException('expired refresh token');
+        $this->blacklistToken($payload->jti,$payload->exp);
         $user = $this->userProvider->retrieveById($payload->sub);
-        return $this->jwt->encode(
-            payload: [
-                'jti' => "$user->email" . '/' . Str::random(32),
-                'iat' => time(),
-                'exp' => time() + env('JWT_TTL', 1800),
-                'sub' => $user->id
-            ],
-            secret: env('JWT_SECRET', 'Bearer'),
-            alg: env('JWT_ALG', 'HS256')
-        );
+        return $this->generateTokens($user);
     }
     public function logout()
     {
         if (!$token = $this->request->bearerToken())
             throw new RequiredTokenException('token not found');
         $payload = $this->jwt->decode($token, env('JWT_SECRET', 'Bearer'));
-        Cache::add("blacklist:$payload->jti", $payload->jti, $payload->exp ?? env('JWT_TTL', 1800));
+        $this->blacklistToken($payload->jti, $payload->exp);
         if (!$token = $this->request->cookie('jrt'))
             throw new RequiredTokenException('refresh token not found');
         $payload = $this->jwt->decode($token, env('JWT_SECRET', 'Bearer'));
-        Cache::add("blacklist:$payload->jti", $payload->jti, $payload->exp ?? env('JWT_REFRESH_TTL', 8400));
+        $this->blacklistToken($payload->jti, $payload->exp);
+    }
+    private function blacklistToken(string $jti, int $ttl)
+    {
+        Cache::add("blacklist:$jti", $jti, $ttl);
     }
     public function user()
     {
@@ -111,7 +109,7 @@ class JwtGuard implements JwtGuardInterface
     }
     public function id()
     {
-        $this->user->id ?? null;
+        return $this->user()->id ?? null;
     }
     public function hasUser()
     {
@@ -127,9 +125,8 @@ class JwtGuard implements JwtGuardInterface
     public function validate(array $credentials = [])
     {
         $columns = Schema::getColumnListing('users');
-        $common = array_intersect_key($credentials, $columns);
-        if (count($common) > count($credentials));
-        throw new InvalidCredentialsException('invalide credentials are provided');
-        return true;
+        foreach (array_keys($credentials) as $key)
+            if (!in_array($key, $columns))
+                throw new InvalidCredentialsException('invalide credentials are provided  ' . $key);
     }
 }

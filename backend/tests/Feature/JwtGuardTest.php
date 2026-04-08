@@ -17,13 +17,14 @@ class JwtGuardTest extends TestCase
         $this->expectException(InvalidCredentialsException::class);
         Auth::guard()->validate([
             'email' => 'email@email.com',
-            'invalid_input' => 'random'
+            'password' => 'random'
         ]);
     }
 
     public function test_user_not_authenticated()
     {
         $this->assertFalse(Auth::guard()->check());
+        // $this->assertEquals(1,3,"mkitsawawch");
     }
 
     

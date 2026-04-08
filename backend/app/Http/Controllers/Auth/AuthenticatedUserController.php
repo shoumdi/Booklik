@@ -4,10 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Dto\Auth\UserDto;
 use App\Http\Controllers\Controller;
-use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-
 class AuthenticatedUserController extends Controller
 {
     public function __invoke(Request $req)

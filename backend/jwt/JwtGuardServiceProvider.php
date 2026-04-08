@@ -18,7 +18,7 @@ class JwtGuardServiceProvider extends ServiceProvider
             return new JwtGuard(
                 userProvider: Auth::createUserProvider($config['provider']),
                 request: $app['request'],
-                jwt: new JWT()
+                jwt: new JwtProvider()
             );
         });
     }

@@ -1,20 +1,17 @@
 <?php
-
 namespace JWT;
 
 use JWT\Exception\ExpiredTokenException;
 use JWT\Exception\InvalidTokenException;
 use DomainException;
-use Exception;
 use InvalidArgumentException;
-use PHPUnit\Framework\Constraint\ExceptionCode;
 use UnexpectedValueException;
 
 use function PHPUnit\Framework\isArray;
 use function PHPUnit\Framework\isNumeric;
 use function PHPUnit\Framework\isString;
 
-class JWT
+class JwtProvider
 {
 
     use JsonHandler;
@@ -132,5 +129,15 @@ class JWT
         $minLength = (int) str_replace('SHA', '', $algo);
         $keyLength = strlen($key) * 8;
         if ($keyLength < $minLength) throw new DomainException('key too short for hashmac');
+    }
+
+    private function constantTimeEquals(string $s1, string $s2): bool
+    {
+        $s1Length = strlen($s1);
+        if ($s1Length !== strlen($s2)) return false;
+        $r = 0;
+        for ($i = 0; $i < $s1Length; $i++)
+            $r |= $s1[$i] ^ $s2[$i];
+        return $r === 0;
     }
 }

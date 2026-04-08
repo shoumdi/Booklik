@@ -2,26 +2,27 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Dto\Auth\LoginDto;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Responses\LoginResponse;
-use App\Service\Auth\LoginService;
+use App\Service\Auth\RefreshTokenService;
 use Core\SuccessJsonResponse;
-use Illuminate\Http\Request;
+use Illuminate\Auth\Events\Login;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Cookie;
 
-class LoginController extends Controller
+class RefreshTokenControler extends Controller
 {
-    public function __invoke(LoginRequest $req, LoginService $login)
+    public function __invoke(
+        RefreshTokenService $service
+    )
     {
-        $res = $login->execute(LoginDto::fromArray($req->validated()));
+        $res = $service->execute();
         return SuccessJsonResponse::make(
-            data: LoginResponse::make($res),
-            status: 201
+            data: ['jat'=>$res['jat']],
+            status: 200
         )->cookie(new Cookie(
             name: 'jrt',
-            value: $res['tokens']['jrt'],
+            value: $res['jrt'],
             expire: time() + env('JWT_REFRESH_TTL', 8400),
             httpOnly: true,
             secure: false,

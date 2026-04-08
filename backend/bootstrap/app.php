@@ -1,9 +1,11 @@
 <?php
 
+use Core\FailureJsonResponse;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use JWT\Exception\ExpiredTokenException;
+use JWT\Exception\InvalidCredentialsException;
 use JWT\Exception\InvalidTokenException;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -33,6 +35,15 @@ return Application::configure(basePath: dirname(__DIR__))
                         'error' => $e->getMessage()
                     ],
                     status: 401
+                );
+            }
+        );
+        $exceptions->render(
+            function (InvalidCredentialsException $e) {
+                return FailureJsonResponse::make(
+                    status: 401,
+                    message: $e->getMessage(),
+                    errors: $e->errors()
                 );
             }
         );
