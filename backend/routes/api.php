@@ -1,11 +1,14 @@
 <?php
 
-use App\Http\Controllers\Auth\AuthenticatedUserController;
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\LogoutController;
-use App\Http\Controllers\Auth\RefreshTokenControler;
-use App\Http\Controllers\Auth\RegisterUserController;
-use App\Http\Controllers\Community\CreateCommunityController;
+use App\Domain\Book\Http\Controllers\CreateBookController;
+use App\Domain\Community\Http\Controllers\CommunityDetailsController;
+use App\Domain\Community\Http\Controllers\CommunityIndexController;
+use App\Domain\Community\Http\Controllers\CreateCommunityController;
+use App\Domain\User\Http\Controllers\AuthenticatedUserController;
+use App\Domain\User\Http\Controllers\LoginController;
+use App\Domain\User\Http\Controllers\LogoutController;
+use App\Domain\User\Http\Controllers\RefreshTokenControler;
+use App\Domain\User\Http\Controllers\RegisterUserController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -18,10 +21,12 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('/me', AuthenticatedUserController::class);
     Route::get('/logout', LogoutController::class);
     Route::post('/communities', CreateCommunityController::class);
-});
+    Route::get('/communities',CommunityIndexController::class);
+    });
+Route::get('/communities/{id}',CommunityDetailsController::class);
 
 
-
+Route::post('/books/suggestions',CreateBookController::class);
 
 Route::delete('/delete', function () {
     return response()->json(
