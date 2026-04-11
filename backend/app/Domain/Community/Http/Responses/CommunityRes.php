@@ -1,6 +1,6 @@
 <?php
 
-namespace App\domain\community\http\responses;
+namespace App\Domain\Community\Http\Responses;
 
 use Core\CommunityRole;
 use Core\Ressource;

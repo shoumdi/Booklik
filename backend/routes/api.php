@@ -2,8 +2,8 @@
 
 use App\Domain\Book\Http\Controllers\CreateBookController;
 use App\Domain\Community\Http\Controllers\CommunityDetailsController;
-use App\Domain\Community\Http\Controllers\CommunityIndexController;
 use App\Domain\Community\Http\Controllers\CreateCommunityController;
+use App\Domain\Community\Http\Controllers\FetchCommunitiesController;
 use App\Domain\User\Http\Controllers\AuthenticatedUserController;
 use App\Domain\User\Http\Controllers\LoginController;
 use App\Domain\User\Http\Controllers\LogoutController;
@@ -21,7 +21,7 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('/me', AuthenticatedUserController::class);
     Route::get('/logout', LogoutController::class);
     Route::post('/communities', CreateCommunityController::class);
-    Route::get('/communities',CommunityIndexController::class);
+    Route::get('/communities',FetchCommunitiesController::class);
     });
 Route::get('/communities/{id}',CommunityDetailsController::class);
 
