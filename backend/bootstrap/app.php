@@ -1,5 +1,6 @@
 <?php
 
+use App\Shared\Utils\Helper;
 use Core\FailureJsonResponse;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -7,6 +8,7 @@ use Illuminate\Foundation\Configuration\Middleware;
 use JWT\Exception\ExpiredTokenException;
 use JWT\Exception\InvalidCredentialsException;
 use JWT\Exception\InvalidTokenException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -18,6 +20,14 @@ return Application::configure(basePath: dirname(__DIR__))
         //
     })
     ->withExceptions(function (Exceptions $exceptions): void {
+         $exceptions->render(function (HttpException $e) {
+            $errors = Helper::getErrorLable($e->getStatusCode());
+            return FailureJsonResponse::make(
+                [$errors['label'] => $e->getMessage()],
+                $e->getStatusCode(),
+                $errors['message']
+            );
+        });
         $exceptions->render(function (ExpiredTokenException $e) {
             return response()->json(
                 data: [
@@ -58,4 +68,5 @@ return Application::configure(basePath: dirname(__DIR__))
                 );
             }
         );
+       
     })->create();
