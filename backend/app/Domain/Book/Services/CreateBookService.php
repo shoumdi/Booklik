@@ -15,8 +15,8 @@ class CreateBookService
     {
         Gate::authorize('create', Book::class);
         $created = DB::transaction(function () use ($data) {
-            $genre = Genre::where('name', $data->genreName);
-
+            $genre = Genre::whereIn('name', $data->genres);
+            $genresIds = 
             $authorsIds = array_map(
                 function ($author) {
                     return Author::firstOrCreate(

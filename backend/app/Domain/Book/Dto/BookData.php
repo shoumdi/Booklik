@@ -8,7 +8,7 @@ class BookData
         readonly string $title,
         readonly string $description,
         readonly float $estimatedPrice,
-        readonly string $genreName,
+        readonly array $genres,
         readonly array $authors
     ) {}
 
@@ -18,7 +18,7 @@ class BookData
             $inputs['title'],
             $inputs['description'],
             $inputs['estimated_price'],
-            $inputs['genre_name'],
+            $inputs['genres'],
             array_map(fn($a) => new AuthorData($a['fname'], $a['lname']), $inputs['authors'])
         );
     }
