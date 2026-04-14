@@ -16,7 +16,6 @@ class CreateBookController extends Controller
     ) {}
     public function __invoke(CreateBookRequest $req)
     {
-        dd($req->validated());
         $saved = $this->service->execute(BookData::from($req->validated()));
         return SuccessJsonResponse::make((new BookResponse($saved))->build());
     }

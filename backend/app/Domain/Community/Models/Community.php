@@ -2,11 +2,13 @@
 
 namespace App\Domain\Community\Models;
 
-use App\Models\Image;
-use App\Models\User;
+use App\Domain\Suggestion\Models\Suggestion;
+use App\Domain\User\Models\User;
+use App\Shared\Models\Image;
 use Core\Trackable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Community extends Model
@@ -21,5 +23,9 @@ class Community extends Model
     }
     function users():BelongsToMany{
         return $this->belongsToMany(User::class,'community_member');
+    }
+
+    function suggestions():HasMany{
+        return $this->hasMany(Suggestion::class);
     }
 }
