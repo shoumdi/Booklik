@@ -5,6 +5,7 @@ namespace App\Domain\Book\Policies;
 use App\Domain\Book\Models\Book;
 use App\Domain\User\Models\User;
 use Core\AppRole;
+use Core\Strings;
 use Illuminate\Auth\Access\Response;
 
 class BookPolicy
@@ -14,7 +15,7 @@ class BookPolicy
      */
     public function viewAny(User $user): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -22,7 +23,7 @@ class BookPolicy
      */
     public function view(User $user, Book $book): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -30,19 +31,17 @@ class BookPolicy
      */
     public function create(User $user): Response
     {
-        return ($user !== null)
+        return $user->roles()->get(['name'])->contains('name','=',AppRole::SUPER_ADMIN->value)
             ? Response::allow()
-            : Response::denyWithStatus(401, 'Only Authenticated user can create books');
+            : Response::denyWithStatus(403,Strings::$UNAUTHORIZED_ERROR);
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Book $book): Response
+    public function update(User $user, Book $book): bool
     {
-        return $user->roles()->get('name') . contains('name', AppRole::SUPER_ADMIN->value)
-            ? Response::allow()
-            : Response::denyWithStatus(403, 'Only SuperAdmin can update books');;
+        return false;
     }
 
     /**
