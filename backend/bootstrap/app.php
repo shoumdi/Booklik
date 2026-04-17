@@ -1,8 +1,10 @@
 <?php
 
 use App\Shared\Utils\Helper;
+use App\Shared\Utils\SqlHelper;
 use Core\FailureJsonResponse;
 use Core\Strings;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -47,4 +49,8 @@ return Application::configure(basePath: dirname(__DIR__))
                 return FailureJsonResponse::make(Strings::$DOMAIN_EXCEPTION, 500, Strings::$DOMAIN_EXCEPTION);
             }
         );
+        $exceptions->render(function (QueryException $q) {
+            $response =  SqlHelper::response($q->errorInfo[1]);
+            return FailureJsonResponse::make(['uknown' => $response['message']], $response['status'], $response['message']);
+        });
     })->create();
