@@ -18,7 +18,7 @@ class CreateSuggestionService
             $created = $book->suggestions()->create();
             $community = Community::find($data->communityId);
             $community->suggestions()->save($created);
-            return $created;
+            return $created->refresh();
         });
     }
 }

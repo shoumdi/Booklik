@@ -2,9 +2,9 @@
 
 namespace App\Domain\Community\Http\Controllers;
 
-use App\domain\community\dto\CreateCommunityData;
-use App\domain\community\http\requests\CreateCommunityRequest;
-use App\domain\community\services\CreateCommunityService;
+use App\Domain\Community\Dto\CreateCommunityData;
+use App\Domain\Community\Http\Requests\CreateCommunityRequest;
+use App\Domain\Community\Services\CreateCommunityService;
 use App\Shared\Http\Controllers\Controller;
 use Core\SuccessJsonResponse;
 use Illuminate\Http\Request;

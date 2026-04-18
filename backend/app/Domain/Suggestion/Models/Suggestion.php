@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Suggestion extends Model
 {
-
+    protected $table = "suggestion" ;
     use Trackable;
 
     public function community(): BelongsTo
