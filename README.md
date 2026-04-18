@@ -1,5 +1,6 @@
 <h1 align="center">📚 Collaborative Community Library</h1>
 <p align="start">
+  <span>Front-end(vue)</span>
   https://github.com/shoumdi/booklik-vue
 </p>
 <p align="center">
