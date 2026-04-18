@@ -51,6 +51,6 @@ return Application::configure(basePath: dirname(__DIR__))
         );
         $exceptions->render(function (QueryException $q) {
             $response =  SqlHelper::response($q->errorInfo[1]);
-            return FailureJsonResponse::make(['uknown' => $response['message']], $response['status'], $response['message']);
+            return FailureJsonResponse::make(['uknown' => $response['message']], $response['status'], $q->getMessage());
         });
     })->create();
