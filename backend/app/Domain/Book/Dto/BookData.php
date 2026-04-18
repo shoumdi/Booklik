@@ -15,11 +15,11 @@ class BookData
     public static function from(array $inputs)
     {
         return new self(
-            $inputs['title'],
-            $inputs['description'],
-            $inputs['estimated_price'],
-            $inputs['genres'],
-            array_map(fn($a) => new AuthorData($a['fname'], $a['lname']), $inputs['authors'])
+            $inputs['book_title'],
+            $inputs['book_description'],
+            $inputs['book_price'],
+            $inputs['book_genres'],
+            array_map(fn($a) => new AuthorData($a['fname'], $a['lname']), $inputs['book_authors'])
         );
     }
 }

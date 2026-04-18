@@ -18,7 +18,7 @@ class CreateSuggestionController extends Controller
     {
         $created = $this->service->execute(SuggestionData::from($req->validated()));
         return SuccessJsonResponse::make(
-            data: (new SuggestionResponse($created)->build()),
+            data: (new SuggestionResponse($created))->build(),
             status: 201,
             message: 'suggestion created successfully'
         );

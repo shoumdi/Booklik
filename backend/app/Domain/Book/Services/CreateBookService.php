@@ -2,43 +2,35 @@
 
 namespace App\Domain\Book\Services;
 
+use App\Domain\Author\Models\Author;
 use App\Domain\Book\Dto\BookData;
-use App\Domain\Book\Models\Author;
 use App\Domain\Book\Models\Book;
 use App\Domain\Genre\Models\Genre;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Gate;
 
 class CreateBookService
 {
     public function execute(BookData $data)
     {
-        Gate::authorize('create', Book::class);
         $created = DB::transaction(function () use ($data) {
-            $genre = Genre::whereIn('name', $data->genres);
-            $genresIds = 
+            $genreIds = Genre::whereIn('name', $data->genres)->get('id')->map(fn($g) => $g->id)->toArray();
             $authorsIds = array_map(
                 function ($author) {
                     return Author::firstOrCreate(
                         ['fname' => $author->firstName, 'lname' => $author->lastName],
-                        [
-                            'fname' => $author->firstName,
-                            'lname' => $author->lastName
-                        ]
+                        ['fname' => $author->firstName, 'lname' => $author->lastName]
                     )->id;
                 },
                 $data->authors
             );
-
             $created = Book::create([
                 'title' => $data->title,
                 'estimated_price' => $data->estimatedPrice,
-                'description' => $data->description
+                'description' => $data->description,
+                'edition' => '1'
             ]);
-
-            $created->genres()->asyncWithoutDetaching([$genre->id]);
-            $created->authors()->asyncWithoutDetaching($authorsIds);
-            
+            $created->genres()->syncWithoutDetaching($genreIds);
+            $created->authors()->syncWithoutDetaching($authorsIds);
             return $created;
         });
 
