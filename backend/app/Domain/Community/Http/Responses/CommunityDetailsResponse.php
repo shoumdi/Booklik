@@ -1,5 +1,5 @@
 <?php
-namespace App\domain\community\http\responses;
+namespace App\Domain\Community\Http\Responses;
 
 use Core\Ressource;
 use Illuminate\Support\Facades\URL;

@@ -1,9 +1,9 @@
 <?php
 
-namespace App\domain\community\services;
+namespace App\Domain\Community\Services;
 
-use App\domain\community\dto\CreateCommunityData;
-use App\domain\community\http\responses\CommunityRes;
+use App\Domain\Community\dto\CreateCommunityData;
+use App\Domain\Community\Http\Responses\CommunityRes;
 use App\Domain\Community\Models\Community;
 use DomainException;
 use Illuminate\Support\Facades\Auth;

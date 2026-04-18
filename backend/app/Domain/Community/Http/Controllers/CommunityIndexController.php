@@ -2,7 +2,7 @@
 
 namespace App\Domain\Community\Http\Controllers;
 
-use App\domain\community\services\FetchCommunitiesService;
+use App\Domain\Community\services\FetchCommunitiesService;
 use App\Shared\Http\Controllers\Controller;
 use Core\SuccessJsonResponse;
 

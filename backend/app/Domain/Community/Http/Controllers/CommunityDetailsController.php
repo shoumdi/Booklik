@@ -2,7 +2,7 @@
 
 namespace App\Domain\Community\Http\Controllers;
 
-use App\domain\community\http\responses\CommunityDetailsResponse;
+use App\Domain\Community\Http\Responses\CommunityDetailsResponse;
 use App\Domain\Community\Models\Community;
 use App\Shared\Http\Controllers\Controller;
 use Core\SuccessJsonResponse;
