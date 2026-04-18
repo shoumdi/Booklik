@@ -2,8 +2,8 @@
 
 namespace App\Domain\Community\Models;
 
-use App\Models\Image;
-use App\Models\User;
+use App\Domain\User\Models\User;
+use App\Shared\Models\Image;
 use Core\Trackable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
