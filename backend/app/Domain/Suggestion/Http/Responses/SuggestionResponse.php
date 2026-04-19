@@ -13,7 +13,8 @@ class SuggestionResponse extends Ressource
             'id'=>$this->model->id,
             'book_title'=>$this->model->book->title,
             'estimated_price'=>$this->model->book->estimated_price,
-            'status'=>$this->model->status
+            'status'=>$this->model->status,
+            'votes'=>$this->model->votes()->count()
         ];
     }
 }

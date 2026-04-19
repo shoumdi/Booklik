@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('suggestion', function (Blueprint $table) {
+        Schema::create('points', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("created_by")->nullable()->constrained('users', 'id')->nullOnDelete();
-            $table->foreignId("updated_by")->nullable()->constrained('users', 'id')->nullOnDelete();
+            $table->integer('value')->default(0);
             $table->foreignId('community_id')->nullable()->constrained('communities', 'id')->nullOnDelete();
-            $table->foreignId('book_id')->nullable()->constrained('books', 'id')->nullOnDelete();
-            $table->enum('status',['SUBMITTED','IN_PROGRESS','IMPLEMENTED','CANCELLED'])->default('SUBMITTED');
+            $table->foreignId('user_id')->nullable()->constrained('users', 'id')->nullOnDelete();
             $table->timestamps();
         });
     }
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('suggestion');
+        Schema::dropIfExists('points');
     }
 };
