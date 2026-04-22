@@ -5,6 +5,6 @@ use App\Domain\Book\Http\Controllers\FetchBooksController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:api'])->group(function () {
-    Route::get("/books", FetchBooksController::class);
     Route::post("/books", CreateBookController::class);
 });
+Route::get("/books", FetchBooksController::class);

@@ -8,7 +8,7 @@ class BookResponse extends Ressource{
     protected function toArray(): array
     {
         return [
-            'name'=>'book1',
+            'title'=>'book1',
         ];
     }
 }

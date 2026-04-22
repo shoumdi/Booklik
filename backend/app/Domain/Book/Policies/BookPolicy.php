@@ -3,7 +3,6 @@
 namespace App\Domain\Book\Policies;
 
 use App\Domain\Book\Models\Book;
-use App\Domain\User\Models\Role;
 use App\Domain\User\Models\User;
 use Core\AppRole;
 use Core\Strings;
@@ -16,7 +15,7 @@ class BookPolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +23,7 @@ class BookPolicy
      */
     public function view(User $user, Book $book): bool
     {
-        return false;
+        return true;
     }
 
     /**
