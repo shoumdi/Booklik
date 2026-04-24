@@ -11,7 +11,8 @@ protected function toArray(): array
         'id'=>$this->model->id,
         'name'=>$this->model->name,
         'description'=>$this->model->description,
-        'books_count'=>$this->model->books()->count()
+        'books_count'=>$this->model->books()->count(),
+        'created_at'=>$this->model->created_at
     ];
 }
 }
