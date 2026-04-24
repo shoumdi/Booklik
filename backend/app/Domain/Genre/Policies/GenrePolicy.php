@@ -40,7 +40,7 @@ class GenrePolicy
      */
     public function update(User $user, Genre $genre): Response
     {
-        return $user->roles()->contains('name', AppRole::SUPER_ADMIN->value)
+        return $user->roles()->get(['name'])->contains('name', AppRole::SUPER_ADMIN->value)
             ? Response::allow()
             : Response::denyWithStatus(403, 'onlyauthorized users can update genres');
     }
@@ -50,7 +50,7 @@ class GenrePolicy
      */
     public function delete(User $user, Genre $genre): Response
     {
-        return $user->roles()->contains('name', AppRole::SUPER_ADMIN->value)
+        return $user->roles()->get(['name'])->contains('name', AppRole::SUPER_ADMIN->value)
             ? Response::allow()
             : Response::denyWithStatus(403, 'onlyauthorized users can update genres');
     }

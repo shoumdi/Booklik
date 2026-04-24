@@ -25,10 +25,10 @@ class GenresController extends Controller
         return SuccessJsonResponse::make((new GenreResponse($saved))->build(), 201);
     }
 
-    public function destroy()
+    public function destroy(int $id)
     {
-        $name = request()->validate(['name' => 'required', 'string']);
-        Gate::authorize('destroy', [Genre::class]);
-        return SuccessJsonResponse::make(['success' => Genre::where('name',$name)->delete()]);
+        $genre = Genre::findOrFail($id);
+        Gate::authorize('delete', $genre);
+        return SuccessJsonResponse::make(['success' => $genre->delete()]);
     }
 }

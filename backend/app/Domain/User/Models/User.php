@@ -5,9 +5,11 @@ namespace App\Domain\User\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use App\Domain\Community\Models\Community;
+use App\Domain\Contribute\Models\Contribution;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -51,10 +53,21 @@ class User extends Authenticatable
         ];
     }
 
-    public function communities():BelongsToMany{
-        return $this->belongsToMany(Community::class,'community_member');
+    public function communities(): BelongsToMany
+    {
+        return $this->belongsToMany(Community::class, 'community_member');
     }
-    public function roles():BelongsToMany{
-        return $this->belongsToMany(Role::class,'user_role');
+    public function roles(): BelongsToMany
+    {
+        return $this->belongsToMany(Role::class, 'user_role');
+    }
+    public function contributions(): HasMany
+    {
+        return $this->hasMany(Contribution::class);
+    }
+
+    public function points(): HasMany
+    {
+        return $this->hasMany(Point::class);
     }
 }

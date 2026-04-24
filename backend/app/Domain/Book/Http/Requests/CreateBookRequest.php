@@ -4,7 +4,7 @@ namespace App\Domain\Book\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\File;
 
 class CreateBookRequest extends FormRequest
 {
@@ -26,6 +26,7 @@ class CreateBookRequest extends FormRequest
         return [
             'book_title' => ['string', 'required'],
             'book_description' => ['required', 'string'],
+            'book_cover' => ['required', File::types(['jpg', 'jpeg', 'png'])->max('2mb')],
             'book_price' => ['required', 'numeric'],
             'book_genres' => ['required', 'array'],
             'book_genres.*' => ['required', 'string'],

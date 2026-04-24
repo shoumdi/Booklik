@@ -9,10 +9,12 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Http\Middleware\HandleCors;
 use Illuminate\Validation\ValidationException;
 use JWT\Exception\ExpiredTokenException;
 use JWT\Exception\InvalidCredentialsException;
 use JWT\Exception\InvalidTokenException;
+use Laravel\Pail\Handler;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -22,7 +24,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->append(HandleCors::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->render(function (ValidationException $e) {

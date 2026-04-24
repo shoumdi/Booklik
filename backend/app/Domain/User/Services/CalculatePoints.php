@@ -28,8 +28,4 @@ class CalculatePoints
                 )
             );
     }
-
-    public static function bookingPoints(int $numberOfDays){
-        return $numberOfDays * 3;
-    }
 }
