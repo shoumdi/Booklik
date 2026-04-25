@@ -6,10 +6,12 @@ namespace App\Domain\User\Models;
 
 use App\Domain\Community\Models\Community;
 use App\Domain\Contribute\Models\Contribution;
+use App\Shared\Models\Image;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -63,11 +65,14 @@ class User extends Authenticatable
     }
     public function contributions(): HasMany
     {
-        return $this->hasMany(Contribution::class);
+        return $this->hasMany(Contribution::class,'made_by');
     }
 
     public function points(): HasMany
     {
         return $this->hasMany(Point::class);
+    }
+    public function profilePicture():MorphOne{
+        return $this->morphOne(Image::class,'imageable');
     }
 }

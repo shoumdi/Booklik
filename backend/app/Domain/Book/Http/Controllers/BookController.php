@@ -4,10 +4,12 @@ namespace App\Domain\Book\Http\Controllers;
 
 use App\Domain\Book\Dto\BookData;
 use App\Domain\Book\Http\Requests\CreateBookRequest;
+use App\Domain\Book\Http\Requests\UpdateBookRequest;
 use App\Domain\Book\Http\Responses\BookResponse;
 use App\Domain\Book\Models\Book;
 use App\Domain\Book\Services\CreateBookService;
 use App\Domain\Book\Services\FetchBooksService;
+use App\Domain\Book\Services\UpdateBookService;
 use App\Shared\Http\Controllers\Controller;
 use Core\SuccessJsonResponse;
 use Illuminate\Support\Facades\Gate;
@@ -28,8 +30,16 @@ class BookController extends Controller
         return SuccessJsonResponse::make((new BookResponse($saved))->build());
     }
 
-    public function show(int $id){
+    public function show(int $id)
+    {
         return SuccessJsonResponse::make((new BookResponse(Book::findOrFail($id)))->build());
+    }
+    public function update(UpdateBookRequest $req, int $id, UpdateBookService $service)
+    {
+        $inputs = $req->validated();
+        $inputs['book_id']=$id;
+        $updated = $service->execute(BookData::from($inputs));
+        return SuccessJsonResponse::make((new BookResponse($updated))->build());
     }
 
     public function destroy(int $id)

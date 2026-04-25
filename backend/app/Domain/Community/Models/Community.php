@@ -9,6 +9,7 @@ use App\Domain\User\Models\User;
 use App\Shared\Models\Image;
 use Core\Trackable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -27,7 +28,9 @@ class Community extends Model
     {
         return $this->belongsToMany(User::class, 'community_member');
     }
-
+    function admin():BelongsTo{
+        return $this->belongsTo(User::class,'created_by');
+    }
     function suggestions(): HasMany
     {
         return $this->hasMany(Suggestion::class);
