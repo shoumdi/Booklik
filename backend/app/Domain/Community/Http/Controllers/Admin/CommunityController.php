@@ -12,7 +12,7 @@ class CommunityController extends Controller
     public function __construct() {}
     public function index()
     {
-        return SuccessJsonResponse::make(CommunityAdminRes::collection(Community::get()));
+        return SuccessJsonResponse::make(CommunityAdminRes::collection(Community::orderBy('created_at','desc')->get()));
     }
 
     public function update(int $id)

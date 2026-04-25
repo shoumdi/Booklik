@@ -17,7 +17,8 @@ class CommunityRes extends Ressource
         return [
             'id' => $this->model->id,
             'name' => $this->model->name,
-            'image_url' => URL::to('/') . $this->model->images[0]->url,
+            'description' => $this->model->description,
+            'image_url' => $this->model->images[0]->url,
             'role' => ($this->model->created_by === auth()->guard()->id())? CommunityRole::ADMIN->value :CommunityRole::MEMBER->value,
             'members_count' => $this->model->users()->count()
         ];
