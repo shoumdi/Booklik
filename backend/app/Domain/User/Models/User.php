@@ -6,6 +6,7 @@ namespace App\Domain\User\Models;
 
 use App\Domain\Community\Models\Community;
 use App\Domain\Contribute\Models\Contribution;
+use App\Domain\Invitation\Models\Invitation;
 use App\Shared\Models\Image;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 
 class User extends Authenticatable
 {
@@ -65,14 +67,33 @@ class User extends Authenticatable
     }
     public function contributions(): HasMany
     {
-        return $this->hasMany(Contribution::class,'made_by');
+        return $this->hasMany(Contribution::class, 'made_by');
     }
 
     public function points(): HasMany
     {
         return $this->hasMany(Point::class);
     }
-    public function profilePicture():MorphOne{
-        return $this->morphOne(Image::class,'imageable');
+    public function profilePicture(): MorphOne
+    {
+        return $this->morphOne(Image::class, 'imageable');
     }
+
+    public function invitations(): HasMany
+    {
+        return $this->hasMany(Invitation::class);
+    }
+
+    public function canSendInvit(int $communityId)
+    {
+        if (DB::table('community_member')
+            ->where('community_id', $communityId)
+            ->where('user_id', $this->id)
+            ->exists()
+        ) return false;
+        if(Invitation::where('community_id',$communityId)
+            ->where('user_id',$this->id)
+            ->where('status','PENDING')->exists()) return false;
+        return true;
+        }
 }

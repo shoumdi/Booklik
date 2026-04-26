@@ -3,6 +3,7 @@
 namespace App\Domain\Community\Models;
 
 use App\Domain\Contribute\Models\Contribution;
+use App\Domain\Invitation\Models\Invitation;
 use App\Domain\Suggestion\Models\Suggestion;
 use App\Domain\User\Models\Point;
 use App\Domain\User\Models\User;
@@ -43,5 +44,9 @@ class Community extends Model
     function points(): HasMany
     {
         return $this->hasMany(Point::class);
+    }
+
+    function invitations():HasMany{
+        return $this->hasMany(Invitation::class);
     }
 }
