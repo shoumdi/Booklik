@@ -7,7 +7,6 @@ use App\Domain\Community\Http\Requests\CreateCommunityRequest;
 use App\Domain\Community\Services\CreateCommunityService;
 use App\Shared\Http\Controllers\Controller;
 use Core\SuccessJsonResponse;
-use Illuminate\Http\Request;
 
 class CreateCommunityController extends Controller
 {

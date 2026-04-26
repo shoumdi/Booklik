@@ -14,12 +14,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Laravel\Scout\Searchable;
 
 class Community extends Model
 {
     protected $fillable = ['name', 'description'];
 
     use Trackable;
+    use Searchable;
 
     function images(): MorphMany
     {
@@ -48,5 +50,11 @@ class Community extends Model
 
     function invitations():HasMany{
         return $this->hasMany(Invitation::class);
+    }
+
+
+    public function contribute(float $amount){
+        $this->balance += $amount;
+        $this->save();
     }
 }
