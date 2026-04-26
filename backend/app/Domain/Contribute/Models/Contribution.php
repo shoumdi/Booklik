@@ -11,14 +11,8 @@ use Illuminate\Support\Facades\Auth;
 
 class Contribution extends Model
 {
-    protected $fillable = ['amount'];
+    protected $fillable = ['amount','made_by'];
 
-    protected static function booted()
-    {
-        static::creating(function ($contribution) {
-            $contribution->made_by = Auth::guard()->id();
-        });
-    }
 
     public function community(): BelongsTo
     {

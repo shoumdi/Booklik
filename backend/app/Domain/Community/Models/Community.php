@@ -51,4 +51,10 @@ class Community extends Model
     function invitations():HasMany{
         return $this->hasMany(Invitation::class);
     }
+
+
+    public function contribute(float $amount){
+        $this->balance += $amount;
+        $this->save();
+    }
 }

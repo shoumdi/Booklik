@@ -24,7 +24,8 @@ class StripeCheckoutGateway implements CheckoutGateway
                     [
                         'price_data' => [
                             'currency' => 'usd',
-                            'unit_amount' => $checkoutData['amount']
+                            'product_data'=>['name'=>"contribution to {$checkoutData['community_id']}"],
+                            'unit_amount' => $checkoutData['ammount']*100
                         ],
                         'quantity' => 1
                     ]

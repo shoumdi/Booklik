@@ -23,7 +23,9 @@ class MakeContributionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "ammount" => ['required', 'numeric', 'min:0']
+            "ammount" => ['required', 'numeric', 'min:0'],
+            'success_url'=>['required','url:http'],
+            'cancel_url'=>['required','url:http'],
         ];
     }
 }

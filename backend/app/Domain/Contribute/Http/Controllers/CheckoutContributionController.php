@@ -18,7 +18,7 @@ class CheckoutContributionController extends Controller
         $url = $this->gatway->checkout([
             'user_id' => Auth::guard()->id(),
             'community_id' => $communityId,
-            $req->validated()
+            ...$req->validated()
         ]);
         return SuccessJsonResponse::make(['redirect_to' => $url], 200);
     }
