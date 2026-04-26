@@ -7,6 +7,8 @@ use App\Domain\Book\Dto\BookData;
 use App\Domain\Book\Models\Book;
 use App\Domain\Genre\Models\Genre;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class CreateBookService
 {
@@ -31,6 +33,12 @@ class CreateBookService
             ]);
             $created->genres()->syncWithoutDetaching($genreIds);
             $created->authors()->syncWithoutDetaching($authorsIds);
+            $coverUrl = $data->cover->storeAs(
+                "books/{$created->id}/images",
+                Str::slug(pathinfo($data->cover->getClientOriginalName(), PATHINFO_FILENAME)) . '_' . uniqid() . '.' . $data->cover->extension(),
+                "public"
+            );
+            $created->cover()->create(['url' => Storage::url($coverUrl)]);
             return $created;
         });
 

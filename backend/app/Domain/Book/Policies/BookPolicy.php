@@ -3,7 +3,6 @@
 namespace App\Domain\Book\Policies;
 
 use App\Domain\Book\Models\Book;
-use App\Domain\User\Models\Role;
 use App\Domain\User\Models\User;
 use Core\AppRole;
 use Core\Strings;
@@ -16,7 +15,7 @@ class BookPolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +23,7 @@ class BookPolicy
      */
     public function view(User $user, Book $book): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -48,9 +47,11 @@ class BookPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Book $book): bool
+    public function delete(User $user, Book $book): Response
     {
-        return false;
+        return $user->roles()->get(['name'])->contains('name','=',AppRole::SUPER_ADMIN->value)
+            ? Response::allow()
+            : Response::denyWithStatus(403,Strings::$UNAUTHORIZED_ERROR);
     }
 
     /**
